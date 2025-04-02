@@ -1,0 +1,11 @@
+name: flight_deals_app
+services:
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+      - ./backend/Flight_Deals.xlsx:/app/Flight_Deals.xlsx
+    env_file:
+      - ./backend/.env
+    stdin_open: true
+    tty: true
