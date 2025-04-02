@@ -49,7 +49,7 @@ Flight Deals Finder to aplikacja do wyszukiwania tanich lotów pomiędzy wybrany
    ```
 2. Uruchom aplikację w kontenerze:
    ```bash
-   docker-compose up --build
+   docker-compose run --rm backend
    ```
 
 ## Struktura projektu
