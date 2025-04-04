@@ -1,18 +1,18 @@
 # Flight Deals Finder
 
-## Opis projektu
-Flight Deals Finder to aplikacja do wyszukiwania tanich lotów pomiędzy wybranymi miastami. Projekt wykorzystuje API do wyszukiwania lotów oraz plik Excel do przechowywania i aktualizacji danych o lotach.
+## Project Description
+Flight Deals Finder is an application for searching cheap flights between selected cities. The project utilizes an API for flight search and an Excel file for storing and updating flight data.
 
-## Funkcjonalności
-- Pobieranie kodów IATA dla miast.
-- Wyszukiwanie najtańszych lotów dla podanych miast i dat.
-- Przechowywanie danych o lotach w pliku Excel.
-- Możliwość uruchomienia aplikacji w kontenerze Docker.
+## Features
+- Retrieving IATA codes for cities.
+- Searching for the cheapest flights for specified cities and dates.
+- Storing flight data in an Excel file.
+- Running the application inside a Docker container.
 
-## Wymagania
+## Requirements
 - Python 3.13
-- Docker i Docker Compose
-- Plik `.env` z kluczami API i danymi uwierzytelniającymi:
+- Docker and Docker Compose
+- A `.env` file containing API keys and authentication data:
   ```plaintext
   AMADEUS_API_KEY=your_api_key
   AMADEUS_API_SECRET=your_api_secret
@@ -25,49 +25,33 @@ Flight Deals Finder to aplikacja do wyszukiwania tanich lotów pomiędzy wybrany
   SHEET_NAME=your_sheet_name
   ```
 
-## Instalacja i uruchomienie
-### Uruchomienie lokalne
-1. Sklonuj repozytorium:
+## Installation and Execution
+### Running Locally
+1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/flight-deals.git
    cd flight-deals
    ```
-2. Zainstaluj wymagane pakiety:
+2. Install the required packages:
    ```bash
    pip install -r requirements.txt
    ```
-3. Uruchom aplikację:
+3. Run the application:
    ```bash
    python main.py
    ```
 
-### Uruchomienie z Docker
-1. Sklonuj repozytorium i przejdź do katalogu projektu:
+### Running with Docker
+1. Clone the repository and navigate to the project directory:
    ```bash
    git clone https://github.com/yourusername/flight-deals.git
    cd flight-deals
    ```
-2. Uruchom aplikację w kontenerze:
+2. Start the application in a container:
    ```bash
    docker-compose run --rm backend
    ```
 
-## Struktura projektu
-```
-flight-deals/
-│── backend/
-│   │── main.py
-│   │── data_manager.py
-│   │── flight_search.py
-│   │── flight_data.py
-│   │── requirements.txt
-│   │── Flight_Deals.xlsx
-│   │── .env
-│── Dockerfile
-│── docker-compose.yml
-│── README.md
-```
-
-## Autor
-- **Drace** - [Twój GitHub](https://github.com/Drace1337)
+## Author
+- **Drace** - [Your GitHub](https://github.com/Drace1337)
 
