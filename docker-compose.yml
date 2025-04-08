@@ -1,11 +1,39 @@
 name: flight_deals_app
 services:
+  postgres:
+    image: 'postgres'
+    restart: always
+    env_file:
+      - ./env/postgres.env
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    env_file:
+      - ./env/pgadmin.env
+    ports:
+      - 5050:80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
   backend:
     build: ./backend
     volumes:
       - ./backend:/app
       - ./backend/Flight_Deals.xlsx:/app/Flight_Deals.xlsx
     env_file:
-      - ./backend/.env
+      - ./env/backend.env
+      - ./env/postgres.env
+    ports:
+      - 5000:5000
     stdin_open: true
     tty: true
+    depends_on:
+      - postgres
+volumes:
+  pgadmin_data:
