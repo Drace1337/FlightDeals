@@ -1,14 +1,38 @@
-def test_search_save_and_history(client, auth_headers):
+from app.models import User
+from app.extensions import db
+from datetime import datetime, timezone
+
+
+def test_search_save_and_history(client):
+    # Rejestracja użytkownika
+    client.post("/auth/register", json={"email": "testuser@example.com", "password": "pass123"})
+
+    # Logowanie
+    login_res = client.post("/auth/login", json={"email": "testuser@example.com", "password": "pass123"})
+    access_token = login_res.get_json()["access_token"]
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+
     search_data = {
         "origin": "CDG",
         "destination": "JFK",
         "departure_date": "2025-06-01",
-        "return_date": "2025-06-10"
+        "return_date": "2025-06-10",
     }
 
-    res = client.post("/search/save", json=search_data, headers=auth_headers)
+
+    print("TOKEN:", access_token)
+    print("HEADERS:", headers)
+    print("DATA:", search_data)
+    res = client.post("/search/save", json=search_data, headers=headers)
+    print("RESPONSE JSON:", res.get_json())
+
     assert res.status_code == 201
 
-    res = client.get("/history/", headers=auth_headers)
-    assert res.status_code == 200
-    assert isinstance(res.get_json(), list)
+    history_res = client.get("/history/", headers=headers)
+    assert history_res.status_code == 200
+    assert len(history_res.get_json()) >= 1
+

@@ -1,11 +1,11 @@
 from unittest.mock import patch
 
-@patch("services.amadues_service.get_iata_codes")
-@patch("services.amadues_service.get_access_token")
-def test_get_iata(mock_token, mock_iata, client, auth_headers):
-    mock_token.return_value = "mock_token"
-    mock_iata.return_value = {"city":"PAR", "airports":["CDG", "ORY"]}
 
-    res = client.post("/search/iata", json={"city": "Paris"}, headers=auth_headers)
+@patch("app.routes.search_routes.amadeus_service.get_token", return_value="mocked_token")
+@patch("app.routes.search_routes.amadeus_service.get_iata_codes", return_value=["JFK"])
+def test_get_iata(mock_get_iata_codes, mock_get_token, client, auth_headers):
+    res = client.get("/search/iata?city=New+York", headers=auth_headers)
+    print("RESPONSE JSON:", res.get_json())
+
     assert res.status_code == 200
-    assert "airports" in res.get_json()
+    assert res.get_json() == ["JFK"]

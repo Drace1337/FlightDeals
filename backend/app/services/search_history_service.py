@@ -1,17 +1,14 @@
-from app.models import db, SearchHistory
+from app.models import SearchHistory
+from app.extensions import db
 from datetime import datetime, timezone
 
 def save_search_history(user_id, search_data):
     history = SearchHistory(
         user_id=user_id,
-        origin_city=search_data['origin_city'],
-        destination_city=search_data['destination_city'],
-        origin_iata=search_data['origin_iata'],
-        destination_iata=search_data['destination_iata'],
-        departure_date=search_data['departure_date'],
-        return_date=search_data['return_date'],
-        passengers=search_data['passengers'],
-        price=search_data.get('price'),
+        origin=search_data['origin'],
+        destination=search_data['destination'],
+        departure_date=datetime.strptime(search_data['departure_date'], "%Y-%m-%d").date(),
+        return_date=datetime.strptime(search_data['return_date'], "%Y-%m-%d").date(),
         created_at=datetime.now(timezone.utc)
     )
     db.session.add(history)
