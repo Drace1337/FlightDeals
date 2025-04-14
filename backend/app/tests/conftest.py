@@ -14,6 +14,9 @@ logging.basicConfig(level=logging.INFO)
 def app():
     app = create_app(config_class=TestConfig)
     with app.app_context():
+        from app.routes.search_routes import init_amadeus_service
+        from app.services.amadeus_service import AmadeusService
+        init_amadeus_service(AmadeusService())
         db.create_all()
         yield app
         db.session.remove()

@@ -6,7 +6,11 @@ from datetime import datetime
 from flask import current_app
 
 search_bp = Blueprint("search", __name__)
-amadeus_service = AmadeusService()
+amadeus_service = None
+
+def init_amadeus_service(service):
+    global amadeus_service
+    amadeus_service = service
 
 
 # @search_bp.route("/iata", methods=["GET", "POST"])
@@ -30,7 +34,7 @@ amadeus_service = AmadeusService()
 @search_bp.route("/iata", methods=["GET", "POST"])
 @jwt_required()
 def get_iata():
-    current_app.logger.info("Request JSON: %s", request.get_json())
+    current_app.logger.info(f"amadeus_service type: {type(amadeus_service)}")
 
     if request.method == "GET":
         city = request.args.get("city")
@@ -44,9 +48,11 @@ def get_iata():
         return jsonify({"error": "City is required"}), 400
 
     #token = amadeus_service.get_token()
-    iata_codes = amadeus_service.get_iata_codes(city)
-
-    return jsonify(iata_codes), 200
+    try:
+        iata_codes = amadeus_service.get_iata_codes(city)
+        return jsonify(iata_codes), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @search_bp.route("/flights", methods=["POST"])

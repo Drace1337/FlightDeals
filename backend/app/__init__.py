@@ -8,6 +8,7 @@ from app.routes.search_routes import search_bp
 from app.routes.history_routes import history_bp
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
+from app.services.amadeus_service import AmadeusService
 
 # migrate = Migrate()
 login_manager = LoginManager()
@@ -28,6 +29,9 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         return db.session.get(User, int(user_id))
+    
+    from app.routes.search_routes import init_amadeus_service
+    init_amadeus_service(AmadeusService)
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(search_bp, url_prefix="/search")
