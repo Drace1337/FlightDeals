@@ -8,10 +8,10 @@ history_bp = Blueprint('history', __name__)
 @history_bp.route("/", methods=["GET"])
 @jwt_required()
 def get_history():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     try:
         history = get_user_history(user_id)
-        return jsonify(history), 200
+        return jsonify([entry.to_dict() for entry in history]), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

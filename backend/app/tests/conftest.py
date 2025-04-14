@@ -27,5 +27,5 @@ def client(app):
 
 @pytest.fixture
 def auth_headers():
-    token = create_access_token(identity=1)  # Assuming user ID 1 for testing
+    token = create_access_token(identity=str(1))  # Assuming user ID 1 for testing
     return {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}

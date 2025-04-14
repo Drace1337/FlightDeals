@@ -28,8 +28,10 @@ class AmadeusService:
         return self.token
 
     def get_iata_codes(self, city_name):
+        print(f"Pobieranie IATA dla miasta: {city_name}")
         if self.token is None:
             self.token = self.get_token()
+        print(f"Pobieranie IATA dla miasta: {city_name}")
         headers = {"Authorization": f"Bearer {self.token}"}
         params = {"keyword": city_name, "subType": "AIRPORT"}
         response = requests.get(self.iata_endpoint, headers=headers, params=params)

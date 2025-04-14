@@ -34,7 +34,7 @@ def get_iata():
 
     if request.method == "GET":
         city = request.args.get("city")
-    else:
+    elif request.method == "POST":
         data = request.get_json()
         city = data.get("city")
 
@@ -43,8 +43,8 @@ def get_iata():
     if not city:
         return jsonify({"error": "City is required"}), 400
 
-    token = amadeus_service.get_token()
-    iata_codes = amadeus_service.get_iata_codes(token, city)
+    #token = amadeus_service.get_token()
+    iata_codes = amadeus_service.get_iata_codes(city)
 
     return jsonify(iata_codes), 200
 
@@ -65,7 +65,7 @@ def save_search_route():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No data provided"}), 400
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     current_app.logger.info("JWT user_id: %s", user_id)
     current_app.logger.info("DATA: %s", data)
 
