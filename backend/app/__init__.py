@@ -35,6 +35,6 @@ def create_app(config_class=Config):
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(search_bp, url_prefix="/search")
-    app.register_blueprint(history_bp, url_prefix="/history")
+    app.register_blueprint(history_bp, url_prefix="/histor")
 
     return app
