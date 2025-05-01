@@ -10,7 +10,21 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    data = request.get_json()
+    """Login a user."""
+
+    if not request.is_json:
+        return jsonify({"message": "No data provided"}), 400
+
+    data = request.get_json() 
+
+    if not data:
+        return jsonify({"message": "Email and password are required"}), 400
+    
+    email = data.get("email")
+    password = data.get("password")
+    if not email or not password:
+        return jsonify({"message": "Email and password are required"}), 401
+
     user = User.query.filter_by(email=data["email"]).first()
     if user and check_password_hash(user.password, data["password"]):
         access_token = create_access_token(identity=str(user.id))
@@ -26,10 +40,20 @@ def logout():
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    """Register a new user."""
+
+    if not request.is_json:
+        return jsonify({"message": "No data provided"}), 400
+
+
     data = request.get_json()
-    name = data["name"]
-    email = data["email"]
-    password = data["password"]
+
+    if not data:
+        return jsonify({"message": "Invalid input"}), 400
+
+    name = data.get("name")
+    email = data.get("email") 
+    password = data.get("password")
     if not email or not password or not name:
         return jsonify({"message": "Email, name and password are required"}), 400
 
@@ -41,7 +65,7 @@ def register():
         return jsonify({"message": "User with such name already exists"}), 409
 
     hashed_password = generate_password_hash(password)
-    new_user = User(name=name,email=email, password=hashed_password)
+    new_user = User(name=name, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"message": "User created successfully"}), 201
