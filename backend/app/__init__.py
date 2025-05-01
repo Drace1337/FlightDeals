@@ -6,6 +6,7 @@ from .config import Config
 from app.routes.auth import auth_bp
 from app.routes.search_routes import search_bp
 from app.routes.history_routes import history_bp
+from app.routes.profile_routes import profile_bp
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
 from app.services.amadeus_service import AmadeusService
@@ -36,5 +37,6 @@ def create_app(config_class=Config):
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(search_bp, url_prefix="/search")
     app.register_blueprint(history_bp, url_prefix="/history")
+    app.register_blueprint(profile_bp, url_prefix="/profile")
 
     return app

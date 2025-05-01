@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 def test_search_save_and_history(client):
     # Rejestracja użytkownika
-    client.post("/auth/register", json={"email": "testuser@example.com", "password": "pass123"})
+    client.post("/auth/register", json={"name": "Drace","email": "testuser@example.com", "password": "pass123"})
 
     # Logowanie
     login_res = client.post("/auth/login", json={"email": "testuser@example.com", "password": "pass123"})

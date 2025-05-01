@@ -27,17 +27,22 @@ def logout():
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
+    name = data["name"]
     email = data["email"]
     password = data["password"]
-    if not email or not password:
-        return jsonify({"message": "Email and password are required"}), 400
+    if not email or not password or not name:
+        return jsonify({"message": "Email, name and password are required"}), 400
 
-    existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        return jsonify({"message": "User already exists"}), 409
+    existing_email = User.query.filter_by(email=email).first()
+    existing_name = User.query.filter_by(name=name).first()
+    if existing_email:
+        return jsonify({"message": "User with such email already exists"}), 409
+    if existing_name:
+        return jsonify({"message": "User with such name already exists"}), 409
 
     hashed_password = generate_password_hash(password)
-    new_user = User(email=email, password=hashed_password)
+    new_user = User(name=name,email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"message": "User created successfully"}), 201
+
