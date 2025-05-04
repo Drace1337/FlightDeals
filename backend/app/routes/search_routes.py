@@ -8,61 +8,109 @@ from flask import current_app
 search_bp = Blueprint("search", __name__)
 amadeus_service = None
 
+
 def init_amadeus_service(service):
     global amadeus_service
     amadeus_service = service
 
 
-# @search_bp.route("/iata", methods=["GET", "POST"])
-# @jwt_required()
-# def get_iata():
-
-#     if request.method == "GET":
-#         city = request.args.get("city")
-#     else:
-#         data = request.get_json()
-#         city = data.get("city")
-
-#     if not city:
-#         return jsonify({"error": "City is required"}), 400
-
-#     token = amadeus_service.get_token()
-#     iata_codes = amadeus_service.get_iata_codes(token, city)
-
-#     return jsonify(iata_codes), 200
-
 @search_bp.route("/iata", methods=["GET", "POST"])
 @jwt_required()
 def get_iata():
-    current_app.logger.info(f"amadeus_service type: {type(amadeus_service)}")
+    """
+    Route to get IATA codes for airports in a given city
 
-    if request.method == "GET":
-        city = request.args.get("city")
-    elif request.method == "POST":
-        data = request.get_json()
-        city = data.get("city")
+    Expected query parameter (GET) or JSON (POST):
+    - city: Name of the city to search for
 
-    print("CITY:", city)
-
-    if not city:
-        return jsonify({"error": "City is required"}), 400
-
-    #token = amadeus_service.get_token()
+    Returns:
+        JSON: List of dictionaries containing airport information including IATA codes
+    """
     try:
+        # Get city parameter from request
+        if request.method == "GET":
+            city = request.args.get("city")
+        else:  # POST
+            data = request.get_json()
+            if not data:
+                return jsonify({"error": "Invalid JSON data"}), 400
+            city = data.get("city")
+
+        # Validate required parameter
+        if not city:
+            return jsonify({"error": "City parameter is required"}), 400
+
+        # Call the service to get IATA codes
         iata_codes = amadeus_service.get_iata_codes(city)
+
         return jsonify(iata_codes), 200
     except Exception as e:
+        current_app.logger.error(f"Error getting IATA codes: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
-@search_bp.route("/flights", methods=["POST"])
+@search_bp.route("/flights", methods=["GET", "POST"])
 @jwt_required()
 def search_flights_route():
-    data = request.get_json()
-    token = amadeus_service.get_token()
-    offers = amadeus_service.search_flights(token, data)
+    """
+    Route to search for flights based on provided parameters
 
-    return jsonify(offers), 200
+    Expected JSON body:
+    {
+        "origin_iata": "SYD",
+        "destination_iata": "BKK",
+        "departure_date": "2023-05-02",
+        "return_date": "2023-05-10",
+        "adults": 1
+    }
+
+    Returns:
+        JSON: Flight offers matching the search criteria
+    """
+    # Check if the request is GET or POST and get data accordingly
+    if request.method == "GET":
+        origin_iata = request.args.get("origin_iata")
+        destination_iata = request.args.get("destination_iata")
+        departure_date = request.args.get("departure_date")
+        return_date = request.args.get("return_date")
+        adults = request.args.get("adults", 1)
+    else:  # POST
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON data"}), 400
+
+        origin_iata = data.get("origin_iata")
+        destination_iata = data.get("destination_iata")
+        departure_date = data.get("departure_date")
+        return_date = data.get("return_date")
+        adults = data.get("adults", 1)
+
+    # Validate required parameters
+    if not all([origin_iata, destination_iata, departure_date]):
+        return (
+            jsonify(
+                {
+                    "error": "Missing required parameters: origin_iata, destination_iata, departure_date"
+                }
+            ),
+            400,
+        )
+
+    try:
+        # Convert adults to integer
+        adults = int(adults)
+
+        # Call the service to search for flights
+        offers = amadeus_service.search_flights(
+            origin_iata, destination_iata, departure_date, return_date, adults
+        )
+
+        return jsonify(offers), 200
+    except ValueError:
+        return jsonify({"error": "adults must be a valid number"}), 400
+    except Exception as e:
+        current_app.logger.error(f"Error searching flights: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 
 @search_bp.route("/save", methods=["POST"])
