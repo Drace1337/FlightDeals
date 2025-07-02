@@ -1,38 +1,47 @@
-from app.models import User
-from app.extensions import db
-from datetime import datetime, timezone
+import pytest
+from unittest.mock import patch, MagicMock
 
-
-def test_search_save_and_history(client):
-    # Rejestracja użytkownika
-    client.post("/auth/register", json={"name": "Drace","email": "testuser@example.com", "password": "pass123"})
-
-    # Logowanie
-    login_res = client.post("/auth/login", json={"email": "testuser@example.com", "password": "pass123"})
-    access_token = login_res.get_json()["access_token"]
-
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json"
-    }
-
-    search_data = {
+def make_fake_history_entry(id=1):
+    fake_entry = MagicMock()
+    fake_entry.to_dict.return_value = {
+        "id": id,
         "origin": "CDG",
         "destination": "JFK",
         "departure_date": "2025-06-01",
         "return_date": "2025-06-10",
     }
+    return fake_entry
 
+@patch("app.routes.history_routes.get_user_history")
+def test_get_history_success(mock_get_history, client, auth_headers):
+    mock_get_history.return_value = [make_fake_history_entry(), make_fake_history_entry(id=2)]
 
-    print("TOKEN:", access_token)
-    print("HEADERS:", headers)
-    print("DATA:", search_data)
-    res = client.post("/search/save", json=search_data, headers=headers)
-    print("RESPONSE JSON:", res.get_json())
+    response = client.get("/history/", headers=auth_headers)
 
-    assert res.status_code == 201
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, list)
+    assert len(data) == 2
+    assert set(data[0].keys()) >= {"id", "origin", "destination", "departure_date", "return_date"}
 
-    history_res = client.get("/history/", headers=headers)
-    assert history_res.status_code == 200
-    assert len(history_res.get_json()) >= 1
+@patch("app.routes.history_routes.get_user_history")
+def test_get_history_empty(mock_get_history, client, auth_headers):
+    mock_get_history.return_value = []
 
+    response = client.get("/history/", headers=auth_headers)
+
+    assert response.status_code == 200
+    assert response.get_json() == []
+
+@patch("app.routes.history_routes.get_user_history")
+def test_get_history_service_raises(mock_get_history, client, auth_headers):
+    mock_get_history.side_effect = Exception("DB error")
+
+    response = client.get("/history/", headers=auth_headers)
+
+    assert response.status_code == 500
+    assert response.get_json() == {"error": "DB error"}
+
+def test_get_history_no_auth(client):
+    response = client.get("/history/")
+    assert response.status_code == 401

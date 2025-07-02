@@ -12,6 +12,6 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'your_secret_key')
 
 class TestConfig(Config):
-    TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TESTING = True

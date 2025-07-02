@@ -50,6 +50,7 @@ def update_profile():
     db.session.commit()
     return jsonify({"message": "Profile updated successfully"}), 200
 
+
 @profile_bp.route("/password", methods=["PUT"])
 @jwt_required()
 def update_password():
@@ -62,10 +63,10 @@ def update_password():
     data = request.get_json()
     if not all(key in data for key in ["current_password", "new_password"]):
         return jsonify({"message": "Current and new password are required"}), 400
-    
+
     if not check_password_hash(user.password, data["current_password"]):
         return jsonify({"message": "Current password is incorrect"}), 401
-    
+
     user.password = generate_password_hash(data["new_password"])
     db.session.commit()
 

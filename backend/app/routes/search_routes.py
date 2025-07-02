@@ -10,8 +10,10 @@ amadeus_service = None
 
 
 def init_amadeus_service(service):
-    global amadeus_service
-    amadeus_service = service
+    current_app.extensions["amadeus_service"] = service
+
+def get_amadeus_service():
+    return current_app.extensions.get("amadeus_service")
 
 
 @search_bp.route("/iata", methods=["GET", "POST"])
@@ -41,7 +43,7 @@ def get_iata():
             return jsonify({"error": "City parameter is required"}), 400
 
         # Call the service to get IATA codes
-        iata_codes = amadeus_service.get_iata_codes(city)
+        iata_codes = get_amadeus_service().get_iata_codes(city)
 
         return jsonify(iata_codes), 200
     except Exception as e:
@@ -101,7 +103,7 @@ def search_flights_route():
         adults = int(adults)
 
         # Call the service to search for flights
-        offers = amadeus_service.search_flights(
+        offers = get_amadeus_service().search_flights(
             origin_iata, destination_iata, departure_date, return_date, adults
         )
 

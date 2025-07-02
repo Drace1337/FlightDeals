@@ -3,14 +3,14 @@ def test_register_and_login(client):
     register_data = {
         "name": "Drace",
         "email": "test@example.com",
-        "password": "pass123",
+        "password": "password123",
     }
     res = client.post("/auth/register", json=register_data)
     assert res.status_code == 201
     assert res.get_json()["message"] == "User created successfully"
 
     # Logowanie
-    login_data = {"email": "test@example.com", "password": "pass123"}
+    login_data = {"email": "test@example.com", "password": "password123"}
     res = client.post("/auth/login", json=login_data)
     assert res.status_code == 200
     assert "access_token" in res.get_json()
@@ -18,13 +18,13 @@ def test_register_and_login(client):
 
 def test_register_missing_fields(client):
     # Test missing email
-    register_data = {"name": "TestUser", "password": "password123"}
+    register_data = {"name": "Drace", "password": "password123"}
     res = client.post("/auth/register", json=register_data)
     assert res.status_code == 400
     assert "required" in res.get_json()["message"]
 
     # Test missing password
-    register_data = {"name": "TestUser", "email": "test@example.com"}
+    register_data = {"name": "Drace", "email": "test@example.com"}
     res = client.post("/auth/register", json=register_data)
     assert res.status_code == 400
     assert "required" in res.get_json()["message"]
@@ -55,7 +55,7 @@ def test_register_duplicate_email(client):
     register_data = {
         "name": "SecondUser",
         "email": "duplicate@example.com",
-        "password": "anotherpassword",
+        "password": "password1234",
     }
     res = client.post("/auth/register", json=register_data)
     assert res.status_code == 409
@@ -65,7 +65,7 @@ def test_register_duplicate_email(client):
 def test_register_duplicate_name(client):
     # First registration
     register_data = {
-        "name": "DuplicateName",
+        "name": "Drace",
         "email": "user1@example.com",
         "password": "password123",
     }
@@ -74,9 +74,9 @@ def test_register_duplicate_name(client):
 
     # Try to register with the same name
     register_data = {
-        "name": "DuplicateName",
+        "name": "Drace",
         "email": "user2@example.com",
-        "password": "anotherpassword",
+        "password": "password1234",
     }
     res = client.post("/auth/register", json=register_data)
     assert res.status_code == 409
@@ -86,7 +86,7 @@ def test_register_duplicate_name(client):
 def test_login_invalid_credentials(client):
     # Register a user first
     register_data = {
-        "name": "ValidUser",
+        "name": "Drace",
         "email": "valid@example.com",
         "password": "correctpassword",
     }
@@ -127,7 +127,7 @@ def test_login_missing_fields(client):
 def test_logout(client):
     # Register and login a user first
     register_data = {
-        "name": "LogoutUser",
+        "name": "Drace",
         "email": "logout@example.com",
         "password": "password123",
     }
