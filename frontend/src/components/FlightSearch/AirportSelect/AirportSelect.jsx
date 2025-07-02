@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './AirportSelect.scss';
+import api from '../../../services/api';
 
 const AirportSelect = ({ city, onSelect, className }) => {
   const [airports, setAirports] = useState([]);
@@ -7,12 +8,11 @@ const AirportSelect = ({ city, onSelect, className }) => {
 
   useEffect(() => {
     if (!city) return;
-    
+
     setLoading(true);
-    fetch(`/search/iata?city=${encodeURIComponent(city)}`)
-      .then(res => res.json())
-      .then(data => {
-        setAirports(data);
+    api.get('/search/iata', { params: { city } })
+      .then(res => {
+        setAirports(res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));

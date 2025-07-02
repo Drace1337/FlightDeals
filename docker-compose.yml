@@ -35,5 +35,13 @@ services:
     tty: true
     depends_on:
       - postgres
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:80
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
 volumes:
   pgadmin_data:

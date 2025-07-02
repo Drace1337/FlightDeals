@@ -38,7 +38,7 @@ def logout():
     return jsonify({"message": "Logout successful"}), 200
 
 
-@auth_bp.route("/register", methods=["POST"])
+@auth_bp.route("/register", methods=["POST", "GET"])
 def register():
     """Register a new user."""
 
