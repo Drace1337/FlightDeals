@@ -12,9 +12,6 @@ from flask_cors import CORS
 from flask_login import LoginManager
 
 from .services.amadeus_service import AmadeusService
-from flask import Flask
-from flask_cors import CORS
-
 
 # migrate = Migrate()
 login_manager = LoginManager()
@@ -28,7 +25,24 @@ def create_app(config_class=Config):
     db.init_app(app)
     login_manager.init_app(app)
     jwt.init_app(app)
-    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+    
+    # Comprehensive CORS configuration
+    CORS(app, 
+         origins=["http://localhost:3000"],
+         supports_credentials=True,
+         allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+         expose_headers=["Content-Type", "Authorization"])
+    
+    # Add after_request handler for additional CORS headers
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Accept,Origin')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+    
     # migrate.init_app(app, db)
 
     from app.models import User 
@@ -40,6 +54,7 @@ def create_app(config_class=Config):
     with app.app_context():
         db.create_all()
         init_amadeus_service(AmadeusService())
+    login_manager.login_view = None  # disables default redirect to /login
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(search_bp, url_prefix="/search")

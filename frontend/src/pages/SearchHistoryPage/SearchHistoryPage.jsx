@@ -5,20 +5,36 @@ import './SearchHistoryPage.scss';
 const SearchHistoryPage = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    api.get('/history')
-      .then(res => {
-        setHistory(res.data);
+    const fetchHistory = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Please login first');
+        }
+
+        const response = await api.get('/history', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        setHistory(response.data);
         setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
+      } catch (err) {
+        console.error('Error fetching history:', err);
+        setError(err.message);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchHistory();
   }, []);
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="history-page">

@@ -1,10 +1,11 @@
 .flight-results {
-  margin-top: 3rem;
+  margin-top: 2rem;
 
   &__title {
     text-align: center;
     margin-bottom: 2rem;
     color: #333;
+    font-size: 1.5rem;
   }
 
   &__list {
@@ -15,50 +16,163 @@
 
 .flight-card {
   background: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
 
   &__header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  &__airline-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   &__airline {
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  &__flight-number {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+  }
+
+  &__price-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
   }
 
   &__price {
     color: #0066cc;
     font-weight: 700;
+    font-size: 1.3rem;
+  }
+
+  &__class {
+    background: #f0f8ff;
+    color: #0066cc;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 
   &__route {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   &__segment {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  &__airport {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
   }
 
   &__city {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  &__time {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.25rem;
+  }
+
+  &__flight-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    margin: 0 1rem;
   }
 
   &__icon {
+    color: #0066cc;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    
+    &--return {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__duration {
+    font-size: 0.9rem;
     color: #666;
+    font-weight: 500;
+  }
+
+  &__stops {
+    font-size: 0.8rem;
+    color: #ff6b35;
+    margin-top: 0.25rem;
+    font-weight: 600;
+  }
+
+  &__return {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  &__return-label {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  &__return-flight-number {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    margin-top: 0.5rem;
   }
 
   &__details {
     display: flex;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
     color: #666;
     font-size: 0.9rem;
+  }
+
+  &__detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 }
 
@@ -66,13 +180,55 @@
   color: #ff4444;
   padding: 1rem;
   background: #ffeeee;
-  border-radius: 4px;
+  border-radius: 8px;
   margin: 1rem 0;
   text-align: center;
+  border: 1px solid #ffcccc;
 }
 
 .no-flights {
   color: #666;
   text-align: center;
-  padding: 2rem;
+  padding: 3rem 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 2rem 0;
+
+  p {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .flight-card {
+    padding: 1rem;
+
+    &__header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    &__price-info {
+      align-items: flex-start;
+    }
+
+    &__segment {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    &__flight-info {
+      margin: 0;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    &__details {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
 }

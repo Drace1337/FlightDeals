@@ -6,10 +6,8 @@ const SaveSearchModal = ({ searchData, onClose }) => {
   const handleSave = async () => {
     try {
       await api.post('/search/save', {
-        origin: searchData.origin,
-        destination: searchData.destination,
-        originIata: searchData.originIata,
-        destinationIata: searchData.destinationIata,
+        origin: searchData.originIata,
+        destination: searchData.destinationIata,
         departure_date: searchData.departureDate,
         return_date: searchData.returnDate
       });
