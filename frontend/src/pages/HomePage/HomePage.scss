@@ -1,34 +1,59 @@
 .home-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
 
-  .airport-selection {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #f9f9f9;
-    border-radius: 8px;
+  &__tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ddd;
+  }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 2rem;
+  &__tab {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &--active {
+      color: #0066cc;
+      border-bottom-color: #0066cc;
     }
 
-    button {
-      display: block;
-      margin: 2rem auto 0;
-      padding: 1rem 2rem;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    &:hover:not(&--active) {
+      color: #333;
+      border-bottom-color: #eee;
+    }
+  }
 
-      &:disabled {
-        background: #cccccc;
-        cursor: not-allowed;
-      }
+  &__content {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem 0.5rem;
+
+    &__tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    &__content {
+      padding: 1.5rem;
     }
   }
 }

@@ -12,6 +12,9 @@ from flask_cors import CORS
 from flask_login import LoginManager
 
 from .services.amadeus_service import AmadeusService
+from flask import Flask
+from flask_cors import CORS
+
 
 # migrate = Migrate()
 login_manager = LoginManager()
