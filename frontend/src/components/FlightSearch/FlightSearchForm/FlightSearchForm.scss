@@ -70,6 +70,11 @@
     }
   }
 }
+.login-warning {
+  color: #cc0000;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 
 @media (max-width: 600px) {
   .flight-search-form {

@@ -5,11 +5,9 @@ history_bp = Blueprint('history', __name__)
 
 @history_bp.route("", methods=["GET", "OPTIONS"])
 def get_history():
-    # Handle preflight without JWT
     if request.method == "OPTIONS":
         return '', 200
 
-    # Handle GET (requires JWT manually parsed)
     from flask_jwt_extended import verify_jwt_in_request, get_jwt_identity
     try:
         verify_jwt_in_request()

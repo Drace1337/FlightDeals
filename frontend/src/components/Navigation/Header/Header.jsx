@@ -9,6 +9,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
+    window.location.reload(); // Reload to update the UI
   };
 
   return (

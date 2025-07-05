@@ -1,4 +1,3 @@
-// Dodaj te style do istniejącego pliku FlightSearchPage.scss
 
 .loading-container {
   display: flex;
@@ -109,7 +108,6 @@
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .results-header {
     flex-direction: column;

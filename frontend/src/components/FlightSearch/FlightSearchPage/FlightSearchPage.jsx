@@ -6,7 +6,7 @@ import SaveSearchModal from '../SaveSearchModal/SaveSearchModal';
 import api from '../../../services/api';
 import './FlightSearchPage.scss';
 
-// Funkcja do konwersji czasu z formatu PT1H20M na czytelny format
+
 const convertDuration = (ptDuration) => {
     if (!ptDuration) return 'N/A';
     
@@ -28,7 +28,7 @@ const convertDuration = (ptDuration) => {
     return 'N/A';
 };
 
-// Funkcja do pobierania nazwy linii lotniczej na podstawie kodu IATA
+
 const getAirlineName = (code) => {
     const airlines = {
         'LO': 'LOT Polish Airlines',
@@ -47,7 +47,7 @@ const getAirlineName = (code) => {
     return airlines[code] || code;
 };
 
-// Funkcja do transformacji danych z API Amadeus do formatu oczekiwanego przez FlightResults
+
 const transformFlightData = (amadeusData) => {
     if (!Array.isArray(amadeusData)) {
         console.error('Expected array but got:', amadeusData);
@@ -56,7 +56,7 @@ const transformFlightData = (amadeusData) => {
 
     return amadeusData.map((flight, index) => {
         try {
-            // Pobierz pierwszy segment (lot tam)
+            
             const outboundSegment = flight.itineraries?.[0]?.segments?.[0];
             const returnSegment = flight.itineraries?.[1]?.segments?.[0];
             
@@ -65,25 +65,20 @@ const transformFlightData = (amadeusData) => {
                 return null;
             }
 
-            // Pobierz informacje o cenie
+            
             const price = flight.price?.grandTotal || flight.price?.total || 'N/A';
             const currency = flight.price?.currency || '';
             
-            // Pobierz kod linii lotniczej
             const airlineCode = outboundSegment.carrierCode;
             const airlineName = getAirlineName(airlineCode);
             
-            // Pobierz informacje o trasie
             const origin = outboundSegment.departure?.iataCode || 'N/A';
             const destination = outboundSegment.arrival?.iataCode || 'N/A';
             
-            // Pobierz czas trwania
             const duration = convertDuration(outboundSegment.duration);
             
-            // Pobierz klasę
             const fareClass = flight.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin || 'ECONOMY';
             
-            // Pobierz informacje o czasie
             const departureTime = outboundSegment.departure?.at ? 
                 new Date(outboundSegment.departure.at).toLocaleTimeString('en-US', { 
                     hour: '2-digit', 
@@ -129,7 +124,7 @@ const transformFlightData = (amadeusData) => {
             console.error('Error transforming flight data:', error, flight);
             return null;
         }
-    }).filter(flight => flight !== null); // Usuń nieprawidłowe loty
+    }).filter(flight => flight !== null); 
 };
 
 const FlightSearchPage = () => {
@@ -198,13 +193,11 @@ const FlightSearchPage = () => {
 
             console.log('Raw API Response:', response.data);
 
-            // Przekształć dane z API do formatu oczekiwanego przez komponent
             const transformedFlights = transformFlightData(response.data);
             console.log('Transformed flights:', transformedFlights);
 
             setFlights(transformedFlights);
 
-            // Zapisz szczegóły wyszukiwania
             setSearchData(prevData => ({
                 ...prevData,
                 originIata: details.originIata,

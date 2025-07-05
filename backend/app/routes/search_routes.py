@@ -29,20 +29,17 @@ def get_iata():
         JSON: List of dictionaries containing airport information including IATA codes
     """
     try:
-        # Get city parameter from request
         if request.method == "GET":
             city = request.args.get("city")
-        else:  # POST
+        else:  
             data = request.get_json()
             if not data:
                 return jsonify({"error": "Invalid JSON data"}), 400
             city = data.get("city")
 
-        # Validate required parameter
         if not city:
             return jsonify({"error": "City parameter is required"}), 400
 
-        # Call the service to get IATA codes
         iata_codes = get_amadeus_service().get_iata_codes(city)
 
         return jsonify(iata_codes), 200
@@ -69,14 +66,13 @@ def search_flights_route():
     Returns:
         JSON: Flight offers matching the search criteria
     """
-    # Check if the request is GET or POST and get data accordingly
     if request.method == "GET":
         origin_iata = request.args.get("origin_iata")
         destination_iata = request.args.get("destination_iata")
         departure_date = request.args.get("departure_date")
         return_date = request.args.get("return_date")
         adults = request.args.get("adults", 1)
-    else:  # POST
+    else:  
         data = request.get_json()
         if not data:
             return jsonify({"error": "Invalid JSON data"}), 400
@@ -87,7 +83,6 @@ def search_flights_route():
         return_date = data.get("return_date")
         adults = data.get("adults", 1)
 
-    # Validate required parameters
     if not all([origin_iata, destination_iata, departure_date]):
         return (
             jsonify(
@@ -99,10 +94,8 @@ def search_flights_route():
         )
 
     try:
-        # Convert adults to integer
         adults = int(adults)
 
-        # Call the service to search for flights
         offers = get_amadeus_service().search_flights(
             origin_iata, destination_iata, departure_date, return_date, adults
         )
@@ -126,7 +119,6 @@ def save_search_route():
     current_app.logger.info("DATA: %s", data)
 
     try:
-        # konwersja dat ze stringa na date
         data["departure_date"] = datetime.strptime(
             data["departure_date"], "%Y-%m-%d"
         ).date()
