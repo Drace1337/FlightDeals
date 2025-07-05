@@ -71,3 +71,19 @@
     }
   }
 }
+.profile-page__password-form {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+
+  .form-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .message {
+    color: green;
+    font-weight: bold;
+  }
+}

@@ -3,29 +3,35 @@ import { useSearchParams } from 'react-router-dom';
 import LoginForm from '../../components/Auth/LoginForm/LoginForm';
 import RegisterForm from '../../components/Auth/RegisterForm/RegisterForm';
 import './AuthPage.scss';
+import { useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
-  const [searchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'login');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const tab = searchParams.get('tab') || 'login';
+
+  const handleChange = (newTab) => {
+    setSearchParams({ tab: newTab })
+  }
 
   return (
     <div className="auth-page">
       <div className="auth-page__tabs">
         <button
-          className={`auth-page__tab ${activeTab === 'login' ? 'auth-page__tab--active' : ''}`}
-          onClick={() => setActiveTab('login')}
+          className={`auth-page__tab ${tab === 'login' ? 'auth-page__tab--active' : ''}`}
+          onClick={() => handleChange('login')}
         >
           Login
         </button>
         <button
-          className={`auth-page__tab ${activeTab === 'register' ? 'auth-page__tab--active' : ''}`}
-          onClick={() => setActiveTab('register')}
+          className={`auth-page__tab ${tab === 'register' ? 'auth-page__tab--active' : ''}`}
+          onClick={() => handleChange('register')}
         >
           Register
         </button>
       </div>
       <div className="auth-page__content">
-        {activeTab === 'login' ? <LoginForm /> : <RegisterForm />}
+        {tab === 'login' ? <LoginForm /> : <RegisterForm />}
       </div>
     </div>
   );

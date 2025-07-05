@@ -16,6 +16,7 @@ const RegisterForm = () => {
     e.preventDefault();
     try {
       await api.post('/auth/register', formData);
+      alert('Successfuly registered. Login to use a platform.');
       navigate('/auth?tab=login');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
