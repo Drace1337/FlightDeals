@@ -1,89 +1,120 @@
 .profile-page {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	max-width: 600px;
+	margin: 2rem auto;
+	padding: 2rem;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  h1 {
-    margin-bottom: 2rem;
-    text-align: center;
-  }
+	h1 {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
 
-  &__info {
-    p {
-      margin: 1rem 0;
-      padding: 0.5rem;
-      background: #f9f9f9;
-      border-radius: 4px;
-    }
+	&__info {
+		p {
+			margin: 1rem 0;
+			padding: 0.5rem;
+			background: #f9f9f9;
+			border-radius: 4px;
+		}
 
-    button {
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      background: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  }
+		button {
+			margin-top: 1rem;
+			padding: 0.75rem 1.5rem;
+			background: #0066cc;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+	}
 
-  &__form {
-    .form-group {
-      margin: 1rem 0;
+	&__form {
+		.form-group {
+			margin: 1rem 0;
 
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-      }
+			label {
+				display: block;
+				margin-bottom: 0.5rem;
+			}
 
-      input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-    }
-  }
+			input {
+				width: 100%;
+				padding: 0.75rem;
+				border: 1px solid #ddd;
+				border-radius: 4px;
+			}
+		}
+	}
 
-  &__actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
+	&__actions {
+		display: flex;
+		gap: 1rem;
+		margin-top: 1.5rem;
 
-    button {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+		button {
+			flex: 1;
+			padding: 0.75rem;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
 
-      &:first-child {
-        background: #4CAF50;
-        color: white;
-      }
+			&:first-child {
+				background: #4caf50;
+				color: white;
+			}
 
-      &:last-child {
-        background: #f5f5f5;
-      }
-    }
-  }
+			&:last-child {
+				background: #f5f5f5;
+			}
+		}
+	}
 }
 .profile-page__password-form {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f9f9f9;
+	margin-top: 1rem;
+	padding: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	background: #f9f9f9;
 
-  .form-group {
-    margin-bottom: 0.75rem;
+	.form-group {
+		margin-bottom: 0.75rem;
+	
+  label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+  input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
   }
 
-  .message {
-    color: green;
-    font-weight: bold;
-  }
+	.message {
+		color: green;
+		font-weight: bold;
+	}
+}
+.profile-page__toggle-password-btn {
+	margin-top: 1rem;
+	padding: 0.75rem 1.5rem;
+	background: #0066cc;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.profile-page__update-password-btn {
+	margin-top: 1rem;
+	padding: 0.75rem 1.5rem;
+	background: #4caf50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
 }

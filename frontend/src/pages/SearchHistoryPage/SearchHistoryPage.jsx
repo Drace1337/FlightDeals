@@ -55,9 +55,7 @@ const SearchHistoryPage = () => {
                   <span> - {new Date(item.return_date).toLocaleDateString()}</span>
                 )}
               </div>
-              <div className="history-item__actions">
-                <button>Search Again</button>
-              </div>
+              
             </div>
           ))}
         </div>
