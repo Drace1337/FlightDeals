@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 
 @patch("app.routes.profile_routes.User")
 def test_get_profile_success(mock_user_model, client, auth_headers):
+    """Test retrieving user profile successfully."""
     mock_user = MagicMock()
     mock_user.email = "user@example.com"
     mock_user.name = "Drace"
@@ -21,6 +22,7 @@ def test_get_profile_success(mock_user_model, client, auth_headers):
 
 @patch("app.routes.profile_routes.User")
 def test_get_profile_user_not_found(mock_user_model, client, auth_headers):
+    """Test retrieving user profile when user is not found."""
     mock_user_model.query.get.return_value = None
 
     response = client.get("/profile", headers=auth_headers)
@@ -32,6 +34,7 @@ def test_get_profile_user_not_found(mock_user_model, client, auth_headers):
 @patch("app.routes.profile_routes.User")
 @patch("app.routes.profile_routes.db")
 def test_update_profile_success(mock_db, mock_user_model, client, auth_headers):
+    """Test updating user profile successfully."""
     mock_user = MagicMock()
     mock_user.email = "old@example.com"
     mock_user.name = "Old Drace"
@@ -53,6 +56,7 @@ def test_update_profile_success(mock_db, mock_user_model, client, auth_headers):
 
 @patch("app.routes.profile_routes.User")
 def test_update_profile_user_not_found(mock_user_model, client, auth_headers):
+    """Test updating user profile when user is not found."""
     mock_user_model.query.get.return_value = None
 
     response = client.put("/profile", headers=auth_headers, json={"name": "Drace"})
@@ -63,11 +67,12 @@ def test_update_profile_user_not_found(mock_user_model, client, auth_headers):
 
 @patch("app.routes.profile_routes.User")
 def test_update_profile_conflict_email(mock_user_model, client, auth_headers):
+    """Test updating user profile with an email that already exists."""
     mock_user = MagicMock()
     mock_user.email = "old@example.com"
     mock_user.name = "Drace"
     mock_user_model.query.get.return_value = mock_user
-    mock_user_model.query.filter_by.return_value.first.return_value = True  # Email exists
+    mock_user_model.query.filter_by.return_value.first.return_value = True  
 
     response = client.put(
         "/profile", headers=auth_headers, json={"email": "existing@example.com"}
@@ -79,14 +84,14 @@ def test_update_profile_conflict_email(mock_user_model, client, auth_headers):
 
 @patch("app.routes.profile_routes.User")
 def test_update_profile_conflict_name(mock_user_model, client, auth_headers):
+    """Test updating user profile with a name that already exists."""
     mock_user = MagicMock()
     mock_user.email = "user@example.com"
     mock_user.name = "Drace"
     mock_user_model.query.get.return_value = mock_user
 
-    # Configure .filter_by(name=...) to simulate name conflict
     mock_query = MagicMock()
-    mock_query.first.return_value = True  # Simulate existing name
+    mock_query.first.return_value = True
     mock_user_model.query.filter_by.return_value = mock_query
 
     response = client.put(
@@ -103,6 +108,7 @@ def test_update_profile_conflict_name(mock_user_model, client, auth_headers):
 @patch("app.routes.profile_routes.User")
 @patch("app.routes.profile_routes.db")
 def test_update_password_success(mock_db, mock_user_model, client, auth_headers):
+    """Test updating user password successfully."""
     current_password = "password123"
     new_password = "password456"
     hashed = generate_password_hash(current_password)
@@ -124,6 +130,7 @@ def test_update_password_success(mock_db, mock_user_model, client, auth_headers)
 
 @patch("app.routes.profile_routes.User")
 def test_update_password_user_not_found(mock_user_model, client, auth_headers):
+    """Test updating password when user is not found."""
     mock_user_model.query.get.return_value = None
 
     response = client.put(
@@ -138,6 +145,7 @@ def test_update_password_user_not_found(mock_user_model, client, auth_headers):
 
 @patch("app.routes.profile_routes.User")
 def test_update_password_missing_fields(mock_user_model, client, auth_headers):
+    """Test updating password with missing fields."""
     mock_user = MagicMock()
     mock_user_model.query.get.return_value = mock_user
 
@@ -151,6 +159,7 @@ def test_update_password_missing_fields(mock_user_model, client, auth_headers):
 
 @patch("app.routes.profile_routes.User")
 def test_update_password_wrong_current_password(mock_user_model, client, auth_headers):
+    """Test updating password with incorrect current password."""
     mock_user = MagicMock()
     mock_user.password = generate_password_hash("password123")
     mock_user_model.query.get.return_value = mock_user

@@ -10,9 +10,19 @@ amadeus_service = None
 
 
 def init_amadeus_service(service):
+    """
+    Initialize the AmadeusService and store it in the Flask app context.
+    This allows the service to be accessed globally within the app.
+    """
     current_app.extensions["amadeus_service"] = service
 
 def get_amadeus_service():
+    """
+    Retrieve the AmadeusService instance from the Flask app context.
+    This function is used to access the AmadeusService throughout the application.
+    Returns:
+        AmadeusService: The initialized AmadeusService instance.
+    """
     return current_app.extensions.get("amadeus_service")
 
 
@@ -111,6 +121,19 @@ def search_flights_route():
 @search_bp.route("/save", methods=["POST"])
 @jwt_required()
 def save_search_route():
+    """
+    Route to save a flight search history entry for the authenticated user.
+    Expected JSON body:
+    {
+        "origin_iata": "SYD",
+        "destination_iata": "BKK",
+        "departure_date": "2023-05-02",
+        "return_date": "2023-05-10",
+        "adults": 1
+    }
+    Returns:
+        JSON: Confirmation message and search ID if successful
+    """
     data = request.get_json()
     if not data:
         return jsonify({"error": "No data provided"}), 400

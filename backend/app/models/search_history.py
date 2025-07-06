@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 
 class SearchHistory(db.Model):
+    """Model for storing search history of users."""
     __tablename__ = "search_history"
 
     id = db.Column(db.Integer, primary_key=True)

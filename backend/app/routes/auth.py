@@ -34,6 +34,7 @@ def login():
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
+    """Logout a user."""
     logout_user()
     return jsonify({"message": "Logout successful"}), 200
 

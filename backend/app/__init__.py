@@ -17,6 +17,7 @@ jwt = JWTManager()
 
 
 def create_app(config_class=Config):
+    """Create and configure the Flask application."""
     app = Flask(__name__)
     app.config.from_object(config_class)
 
@@ -44,6 +45,7 @@ def create_app(config_class=Config):
 
     @login_manager.user_loader
     def load_user(user_id):
+        """Load a user from the database by user ID."""
         return db.session.get(User, int(user_id))
     
     with app.app_context():

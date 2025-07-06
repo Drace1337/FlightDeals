@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 @pytest.fixture
 def app():
+    """Fixture to create a Flask application instance for testing."""
     app = create_app(config_class=TestConfig)
     with app.app_context():
         init_amadeus_service(AmadeusService())
@@ -29,11 +30,13 @@ def app():
 
 @pytest.fixture
 def client(app):
+    """Fixture to create a test client for the Flask application."""
     return app.test_client()
 
 
 @pytest.fixture
 def auth_headers():
+    """Fixture to create authentication headers for testing."""
     token = create_access_token(identity=str(1))  
     return {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 

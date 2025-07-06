@@ -5,6 +5,9 @@ from datetime import datetime
 
 class AmadeusService:
     def __init__(self):
+        """Initialize the AmadeusService with API credentials and endpoints.
+        The API credentials and endpoints are expected to be set as environment variables.
+        """
         self.api_key = os.getenv("AMADEUS_API_KEY")
         self.api_secret = os.getenv("AMADEUS_API_SECRET")
         self.iata_endpoint = os.getenv("IATA_ENDPOINT")
@@ -13,6 +16,11 @@ class AmadeusService:
         self.token = None
 
     def get_token(self):
+        """        Retrieve an access token from the Amadeus API using client credentials.
+        This method caches the token to avoid unnecessary requests.
+        Returns:
+            str: Access token for the Amadeus API
+        """
         if self.token is not None:
             return self.token
         response = requests.post(
@@ -45,14 +53,13 @@ class AmadeusService:
         params = {
             "keyword": city_name,
             "include": "AIRPORTS",
-            "max": 10,  # Limiting to 10 results as specified in the API docs
+            "max": 10,  
         }
 
         response = requests.get(self.iata_endpoint, headers=headers, params=params)
         response.raise_for_status()
 
-        # Returning more complete information for the dropdown
-        # Each item will have IATA code, city name, and airport name for better user experience
+        
         results = []
         for item in response.json().get("data", []):
             if "iataCode" in item:
@@ -70,6 +77,14 @@ class AmadeusService:
     def search_flights(
         self, origin_iata, destination_iata, departure_date, return_date, adults
     ):
+        """        Search for flights based on provided parameters
+        Args:
+            origin_iata (str): IATA code of the origin airport
+            destination_iata (str): IATA code of the destination airport
+            departure_date (str): Departure date in YYYY-MM-DD format
+            return_date (str): Return date in YYYY-MM-DD format
+            adults (int): Number of adult passengers
+        """
         if self.token is None:
             self.token = self.get_token()
         headers = {"Authorization": f"Bearer {self.token}"}

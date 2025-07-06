@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
+    """Model for user accounts."""
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)

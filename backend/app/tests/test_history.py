@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 def make_fake_history_entry(id=1):
+    """Create a fake search history entry for testing."""
     fake_entry = MagicMock()
     fake_entry.to_dict.return_value = {
         "id": id,
@@ -14,9 +15,10 @@ def make_fake_history_entry(id=1):
 
 @patch("app.routes.history_routes.get_user_history")
 def test_get_history_success(mock_get_history, client, auth_headers):
+    """Test retrieving user search history successfully."""
     mock_get_history.return_value = [make_fake_history_entry(), make_fake_history_entry(id=2)]
 
-    response = client.get("/history/", headers=auth_headers)
+    response = client.get("/history", headers=auth_headers)
 
     assert response.status_code == 200
     data = response.get_json()
@@ -26,22 +28,25 @@ def test_get_history_success(mock_get_history, client, auth_headers):
 
 @patch("app.routes.history_routes.get_user_history")
 def test_get_history_empty(mock_get_history, client, auth_headers):
+    """Test retrieving user search history when empty."""
     mock_get_history.return_value = []
 
-    response = client.get("/history/", headers=auth_headers)
+    response = client.get("/history", headers=auth_headers)
 
     assert response.status_code == 200
     assert response.get_json() == []
 
 @patch("app.routes.history_routes.get_user_history")
 def test_get_history_service_raises(mock_get_history, client, auth_headers):
+    """Test handling of service errors when retrieving search history."""
     mock_get_history.side_effect = Exception("DB error")
 
-    response = client.get("/history/", headers=auth_headers)
+    response = client.get("/history", headers=auth_headers)
 
     assert response.status_code == 500
     assert response.get_json() == {"error": "DB error"}
 
 def test_get_history_no_auth(client):
-    response = client.get("/history/")
+    """Test unauthorized access to search history."""
+    response = client.get("/history")
     assert response.status_code == 401

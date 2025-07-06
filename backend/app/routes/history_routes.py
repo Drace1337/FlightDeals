@@ -5,6 +5,15 @@ history_bp = Blueprint('history', __name__)
 
 @history_bp.route("", methods=["GET", "OPTIONS"])
 def get_history():
+    """
+    Get the search history for the authenticated user.
+    ---
+    responses:
+      200:
+        description: A list of search history entries for the user.
+        401:
+        description: Unauthorized access if the user is not authenticated.
+    """
     if request.method == "OPTIONS":
         return '', 200
 
